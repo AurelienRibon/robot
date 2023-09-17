@@ -19,15 +19,15 @@ app = FastAPI()
 
 @app.post("/stt")
 async def stt(file: UploadFile):
-    file = utils.tmp_file("stt", "wav")
-    utils.write_stream(file.file, file)
-    return api.speech_to_text(file)
+    path = utils.tmp_file("stt", "wav")
+    utils.write_stream(file.file, path)
+    return api.speech_to_text(path)
 
 
 @app.post("/tts")
 async def tts(data: TTSInput):
-    file = api.text_to_speech(data.text)
-    return FileResponse(file)
+    path = api.text_to_speech(data.text)
+    return FileResponse(path)
 
 
 @app.post("/gpt")

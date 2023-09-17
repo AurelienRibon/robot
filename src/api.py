@@ -13,28 +13,28 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "googlecloud.json"
 
 def text_to_speech(text):
     tick = timer()
-    file = tmp_file("tts", "mp3")
+    path = tmp_file("tts", "mp3")
 
     log("[tts] Converting text to audio file...", tick)
-    _tts_googlecloud(text, file)
+    _tts_googlecloud(text, path)
 
     log("[tts] Mutating audio...", tick)
-    audio = pydub.AudioSegment.from_mp3(file)
+    audio = pydub.AudioSegment.from_mp3(path)
     audio = audio._spawn(
         audio.raw_data, overrides={"frame_rate": int(audio.frame_rate * 0.8)}
     )
     audio = audio.speedup(playback_speed=1.2)
-    audio.export(file, format="mp3")
+    audio.export(path, format="mp3")
 
     log("[tts] Done.", tick)
-    return file
+    return path
 
 
-def speech_to_text(file):
+def speech_to_text(path):
     tick = timer()
 
     log("[stt] Converting audio file to text...", tick)
-    text = _stt_openai(file)
+    text = _stt_openai(path)
 
     log("[stt] Done. text: " + text, tick)
     return text
@@ -63,7 +63,7 @@ def ask_gpt(chat, model="gpt-4"):
 # ------------------------------------------------------------------------------
 
 
-def _tts_googlecloud(text, file):
+def _tts_googlecloud(text, path):
     client = texttospeech.TextToSpeechClient()
     synthesis_input = texttospeech.SynthesisInput(text=text)
     voice = texttospeech.VoiceSelectionParams(
@@ -75,11 +75,11 @@ def _tts_googlecloud(text, file):
     response = client.synthesize_speech(
         input=synthesis_input, voice=voice, audio_config=audio_config
     )
-    with open(file, "wb") as out:
+    with open(path, "wb") as out:
         out.write(response.audio_content)
 
 
-def _stt_openai(file):
-    with open(file, "rb") as audio_file:
+def _stt_openai(path):
+    with open(path, "rb") as audio_file:
         transcript = openai.Audio.transcribe("whisper-1", audio_file, language="fr")
     return transcript["text"]

@@ -24,6 +24,7 @@
         height: 200px;
         background-color: #812f00;
         border-radius: 50%;
+        user-select: none;
       }
 
       .push-front {
@@ -40,7 +41,7 @@
         transform: translateY(-4px);
       }
 
-      #transcription {
+      #text {
         padding: 20px;
         position: absolute;
         width: 100%;
@@ -55,44 +56,53 @@
     <div id="push">
       <div class="push-front"></div>
     </div>
-    <div id="transcription"></div>
+    <div id="text"></div>
 
     <script type="module">
-      import { disableContextMenu, recordAudio, askGpt, textToSpeech } from "./main.js";
+      import { askGpt, recordAudio, textToSpeech, disableContextMenu } from './main.js';
 
-      alert(navigator.mediaDevices)
+      main();
 
-      disableContextMenu();
+      function main() {
+        disableContextMenu();
 
-      const chat = [`Tu es le roi du rap. Fais des phrases courtes pour répondre.`];
+        const pushEl = document.getElementById('push');
+        const textEl = document.getElementById('text');
 
-      const pushEl = document.getElementById("push");
-      const transcriptionEl = document.getElementById("transcription");
-      let recorder;
+        // Check if we can record audio
+        if (!navigator.mediaDevices) {
+          textEl.innerText = "L'enregistement audio n'est pas supporté par votre navigateur.";
+          textEl.style.color = 'red';
+          return;
+        }
 
-      pushEl.ontouchstart = async () => {
-        pushEl.querySelector(".push-front").classList.add("push-front-pushed");
-        recorder = await recordAudio(async (text) => {
-          // Show message and register it to the chat
-          transcriptionEl.innerText = `- ${text}`;
-          chat.push(text);
+        const chat = [`Tu es le roi du rap. Fais des phrases courtes pour répondre.`];
+        let recorder;
 
-          // Ask GPT for a reply
-          const reply = await askGpt(chat);
+        pushEl.ontouchstart = async () => {
+          pushEl.querySelector('.push-front').classList.add('push-front-pushed');
+          recorder = await recordAudio(async (text) => {
+            // Show message and register it to the chat
+            textEl.innerText = `- ${text}`;
+            chat.push(text);
 
-          // Show reply and register it to the chat
-          transcriptionEl.innerText += `\n\n- ${reply}`;
-          chat.push(reply);
+            // Ask GPT for a reply
+            const reply = await askGpt(chat);
 
-          // Speak the reply
-          await textToSpeech(reply);
-        });
-      };
+            // Show reply and register it to the chat
+            textEl.innerText += `\n\n- ${reply}`;
+            chat.push(reply);
 
-      pushEl.ontouchend = () => {
-        pushEl.querySelector(".push-front").classList.remove("push-front-pushed");
-        recorder?.stop();
-      };
+            // Speak the reply
+            await textToSpeech(reply);
+          });
+        };
+
+        pushEl.ontouchend = () => {
+          pushEl.querySelector('.push-front').classList.remove('push-front-pushed');
+          recorder?.stop();
+        };
+      }
     </script>
   </body>
 </html>

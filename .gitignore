@@ -1,0 +1,5 @@
+/tts
+__pycache__
+.DS_Store
+googlecloud.json
+poetry.lock

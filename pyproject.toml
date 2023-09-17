@@ -6,6 +6,7 @@ authors = ["Aurelien Ribon <aurelien.ribon@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
+auto-mix-prep = "^0.2.0"
 fastapi = "^0.103.1"
 google-cloud-texttospeech = "^2.14.1"
 openai = "^0.28.0"
@@ -13,6 +14,7 @@ pydub = "^0.25.1"
 python = "^3.10"
 python-multipart = "^0.0.6"
 uvicorn = "^0.23.2"
+xds-protos = "^1.58.0"
 
 [build-system]
 requires = ["poetry-core"]

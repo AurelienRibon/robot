@@ -1,6 +1,5 @@
 import openai
 import os
-import pydub
 from google.cloud import texttospeech
 from .utils import log, suid, timer, tmp_file
 
@@ -17,14 +16,6 @@ def text_to_speech(text):
 
     log("[tts] Converting text to audio file...", tick)
     _tts_googlecloud(text, path)
-
-    log("[tts] Mutating audio...", tick)
-    audio = pydub.AudioSegment.from_mp3(path)
-    audio = audio._spawn(
-        audio.raw_data, overrides={"frame_rate": int(audio.frame_rate * 0.8)}
-    )
-    audio = audio.speedup(playback_speed=1.2)
-    audio.export(path, format="mp3")
 
     log("[tts] Done.", tick)
     return path

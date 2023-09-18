@@ -6,8 +6,10 @@
     <title>Robots</title>
     <style>
       * {
-        box-sizing: border-box;
         margin: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+        font-size: 20px;
 
         /* Disable text selection */
         user-select: none;
@@ -29,8 +31,30 @@
       #push {
         width: 200px;
         height: 200px;
+        margin-top: 100px;
         background-color: #812f00;
         border-radius: 50%;
+      }
+
+      #action {
+        color: #868275;
+        margin-top: 30px;
+        font-size: 16px;
+      }
+
+      #text {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 20px;
+        color: #6f6f6f;
+        background: #fbf4e1;
+        box-shadow: 1px 5px 20px 0 #00000021;
+        font-weight: 100;
+      }
+
+      .spacer {
+        flex: 1;
       }
 
       .push-front {
@@ -46,22 +70,14 @@
         background-color: #ba4400;
         transform: translateY(-4px);
       }
-
-      #text {
-        padding: 20px;
-        position: absolute;
-        width: 100%;
-        bottom: 20px;
-        color: #6f6f6f;
-        font-family: sans-serif;
-        font-size: 20px;
-      }
     </style>
   </head>
   <body>
     <div id="push">
       <div class="push-front"></div>
     </div>
+    <div id="action"></div>
+    <div class="spacer"></div>
     <div id="text"></div>
 
     <script type="module">
@@ -74,6 +90,7 @@
 
         const pushEl = document.getElementById('push');
         const textEl = document.getElementById('text');
+        const actionEl = document.getElementById('action');
 
         // Check if we can record audio
         if (!navigator.mediaDevices) {
@@ -86,25 +103,33 @@
         let recorder;
 
         pushEl.ontouchstart = async () => {
+          actionEl.innerText = 'Enregistrement...';
           pushEl.querySelector('.push-front').classList.add('push-front-pushed');
+
           recorder = await recordAudio(async (text) => {
             // Show message and register it to the chat
-            textEl.innerText = `- ${text}`;
+            textEl.innerText = text;
             chat.push(text);
 
             // Ask GPT for a reply
+            actionEl.innerText = 'Attente de la réponse...';
             const reply = await askGpt(chat);
 
             // Show reply and register it to the chat
-            textEl.innerText += `\n\n- ${reply}`;
+            textEl.innerText = reply;
             chat.push(reply);
 
             // Speak the reply
+            actionEl.innerText = 'Conversion en voix...';
             await textToSpeech(reply);
+
+            // Reset
+            actionEl.innerText = '';
           });
         };
 
         pushEl.ontouchend = () => {
+          actionEl.innerText = 'Transcription de la voix...';
           pushEl.querySelector('.push-front').classList.remove('push-front-pushed');
           recorder?.stop();
         };

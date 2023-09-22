@@ -9,7 +9,7 @@
         margin: 0;
         box-sizing: border-box;
         font-family: sans-serif;
-        font-size: 20px;
+        font-size: 16px;
 
         user-select: none;
         -webkit-user-select: none !important;
@@ -19,22 +19,39 @@
       body {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: stretch;
+        align-items: stretch;
         height: 100dvh;
-        background-color: #ebe4d1;
+        overflow: auto;
+        background-color: #a29c8d;
+      }
+
+      h1 {
+        margin-top: 40px;
+        margin-left: 30px;
+        margin-bottom: 20px;
+        font-size: 40px;
+        font-weight: 100;
       }
 
       .item {
-        background-color: aqua;
-        padding: 20px;
+        background-color: #ebe4d1;
+        padding: 15px 20px;
+        margin: 5px 10px;
+        border-radius: 5px;
+        transition: 0.2s all ease;
+      }
+
+      .item-checked {
+        background-color: #e1ac7a;
       }
     </style>
   </head>
   <body>
+    <h1>SCENARIO</h1>
     <script type="module">
-      import { textToSpeech, disableContextMenu } from './index.js';
-      import scenario from './scenario.js';
+      import { textToSpeech, disableContextMenu } from './main.js';
+      import { scenario } from './scenario.js';
 
       disableContextMenu();
 
@@ -42,8 +59,11 @@
         const div = document.createElement('div');
         div.classList.add('item');
         div.innerText = name;
-        div.addEventListener('click', () => textToSpeech(text));
         document.body.appendChild(div);
+        div.addEventListener('click', () => {
+          div.classList.add('item-checked');
+          textToSpeech(text);
+        });
       }
     </script>
   </body>

@@ -58,7 +58,7 @@ def _tts_googlecloud(text, path):
     client = texttospeech.TextToSpeechClient()
     synthesis_input = texttospeech.SynthesisInput(text=text)
     voice = texttospeech.VoiceSelectionParams(
-        language_code="fr-FR", name="fr-FR-Neural2-A"
+        language_code="fr-FR", name="fr-FR-Neural2-D"
     )
     audio_config = texttospeech.AudioConfig(
         audio_encoding=texttospeech.AudioEncoding.MP3

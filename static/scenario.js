@@ -17,7 +17,7 @@ export const scenario = [
   },
   {
     name: '05. APRES LE PARCOURS DE VOITURE',
-    text: "Bravo, les enfants ! Je vous ai envoyé un nouvel indice par avion pour continuer. Il devrait arriver d'ici quelques secondes.",
+    text: "Bravo les enfants ! Je vous ai envoyé un nouvel indice par avion pour continuer. Il devrait arriver d'ici quelques secondes.",
   },
   {
     name: '06. AVANT LE PARCOURS DU SALON',

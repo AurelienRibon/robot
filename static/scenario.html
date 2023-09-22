@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Robots</title>
+    <style>
+      * {
+        margin: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+        font-size: 20px;
+
+        user-select: none;
+        -webkit-user-select: none !important;
+        -webkit-touch-callout: none !important;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100dvh;
+        background-color: #ebe4d1;
+      }
+
+      .item {
+        background-color: aqua;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      import { textToSpeech, disableContextMenu } from './index.js';
+      import scenario from './scenario.js';
+
+      disableContextMenu();
+
+      for (const { name, text } of scenario) {
+        const div = document.createElement('div');
+        div.classList.add('item');
+        div.innerText = name;
+        div.addEventListener('click', () => textToSpeech(text));
+        document.body.appendChild(div);
+      }
+    </script>
+  </body>
+</html>

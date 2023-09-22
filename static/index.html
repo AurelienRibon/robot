@@ -81,12 +81,19 @@
     <div id="text"></div>
 
     <script type="module">
-      import { askGpt, recordAudio, textToSpeech, disableContextMenu } from './main.js';
+      import {
+        askGpt,
+        disableContextMenu,
+        recordAudio,
+        setupRecorder,
+        textToSpeech,
+      } from './main.js';
 
       main();
 
-      function main() {
+      async function main() {
         disableContextMenu();
+        const recorder = await setupRecorder();
 
         const pushEl = document.getElementById('push');
         const textEl = document.getElementById('text');
@@ -100,13 +107,12 @@
         }
 
         const chat = [`Tu es le roi du rap. Fais des phrases courtes pour répondre.`];
-        let recorder;
 
         pushEl.ontouchstart = async () => {
-          actionEl.innerText = 'Enregistrement...';
           pushEl.querySelector('.push-front').classList.add('push-front-pushed');
+          actionEl.innerText = 'Enregistrement...';
 
-          recorder = await recordAudio(async (text) => {
+          await recordAudio(recorder, async (text) => {
             // Show message and register it to the chat
             textEl.innerText = text;
             chat.push(text);
@@ -129,9 +135,9 @@
         };
 
         pushEl.ontouchend = () => {
-          actionEl.innerText = 'Transcription de la voix...';
+          recorder.stop();
           pushEl.querySelector('.push-front').classList.remove('push-front-pushed');
-          recorder?.stop();
+          actionEl.innerText = 'Transcription de la voix...';
         };
       }
     </script>

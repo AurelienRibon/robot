@@ -1,26 +1,36 @@
 import { Howl } from 'https://cdn.skypack.dev/howler@2.2.3?min';
 
+export function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export function disableContextMenu() {
   document.addEventListener('contextmenu', (event) => event.preventDefault());
 }
 
-export async function recordAudio(onTranscribe) {
+export async function setupRecorder() {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  const mediaRecorder = new MediaRecorder(stream);
-  mediaRecorder.start();
+  return new MediaRecorder(stream);
+}
 
-  const audioChunks = [];
-  mediaRecorder.addEventListener('dataavailable', (event) => {
-    audioChunks.push(event.data);
-  });
+export async function recordAudio(recorder, onTranscribe) {
+  recorder.start();
 
-  mediaRecorder.addEventListener('stop', async () => {
-    const audioBlob = new Blob(audioChunks);
+  const chunks = [];
+  const chunkListener = (event) => {
+    chunks.push(event.data);
+  };
+
+  const stopListener = async () => {
+    recorder.removeEventListener('dataavailable', chunkListener);
+    recorder.removeEventListener('stop', stopListener);
+    const audioBlob = new Blob(chunks);
     const text = await speechToText(audioBlob);
     onTranscribe(text);
   });
 
-  return mediaRecorder;
+  recorder.addEventListener('dataavailable', chunkListener);
+  recorder.addEventListener('stop', stopListener);
 }
 
 // -----------------------------------------------------------------------------

@@ -2,7 +2,6 @@ import src.api as api
 import src.utils as utils
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 
@@ -35,4 +34,21 @@ async def gpt(data: GPTInput):
     return api.ask_gpt(data.messages)
 
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+@app.get("/")
+async def index():
+    res = FileResponse("static/index.html")
+    static_headers(res)
+    return res
+
+
+@app.get("/{path}")
+async def static(path: str):
+    res = FileResponse(f"static/{path}")
+    static_headers(res)
+    return res
+
+
+def static_headers(res):
+    res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    res.headers["Pragma"] = "no-cache"
+    res.headers["Expires"] = "0"

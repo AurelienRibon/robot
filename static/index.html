@@ -104,10 +104,10 @@
           `Tu es un robot nommé Timio. Tu es doté d'un intelligence artificielle qui te permet de parler et de
 comprendre le langage humain. Cette intelligence artificielle t'est fournie par une puce électronique spéciale.
 Fais des phrases courtes pour répondre. Et parle simplement, car ton public principal est constitué d'enfants
-de 6 à 10 ans.`,
+de 6 à 10 ans. Un enfant fête son anniversaire aujourd'hui, Benjamin, qui vient d'avoir 9 ans.`,
         ];
 
-        pushEl.ontouchstart = async () => {
+        const touchstartListener = async () => {
           pushEl.querySelector('.push-front').classList.add('push-front-pushed');
           actionEl.innerText = 'Enregistrement...';
 
@@ -133,11 +133,14 @@ de 6 à 10 ans.`,
           });
         };
 
-        pushEl.ontouchend = () => {
+        const touchEndListener = () => {
           recorder.stop();
           pushEl.querySelector('.push-front').classList.remove('push-front-pushed');
           actionEl.innerText = 'Transcription de la voix...';
         };
+
+        pushEl.addEventListener('touchstart', touchstartListener, { passive: true });
+        pushEl.addEventListener('touchend', touchEndListener, { passive: true });
       }
     </script>
   </body>

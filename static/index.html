@@ -81,13 +81,7 @@
     <div id="text"></div>
 
     <script type="module">
-      import {
-        askGpt,
-        disableContextMenu,
-        recordAudio,
-        setupRecorder,
-        textToSpeech,
-      } from './main.js';
+      import { askGpt, disableContextMenu, recordAudio, setupRecorder, textToSpeech } from './main.js';
 
       main();
 
@@ -106,7 +100,12 @@
           return;
         }
 
-        const chat = [`Tu es le roi du rap. Fais des phrases courtes pour répondre.`];
+        const chat = [
+          `Tu es un robot nommé Timio. Tu es doté d'un intelligence artificielle qui te permet de parler et de
+comprendre le langage humain. Cette intelligence artificielle t'est fournie par une puce électronique spéciale.
+Fais des phrases courtes pour répondre. Et parle simplement, car ton public principal est constitué d'enfants
+de 6 à 10 ans.`,
+        ];
 
         pushEl.ontouchstart = async () => {
           pushEl.querySelector('.push-front').classList.add('push-front-pushed');

@@ -27,7 +27,7 @@ export async function recordAudio(recorder, onTranscribe) {
     const audioBlob = new Blob(chunks);
     const text = await speechToText(audioBlob);
     onTranscribe(text);
-  });
+  };
 
   recorder.addEventListener('dataavailable', chunkListener);
   recorder.addEventListener('stop', stopListener);

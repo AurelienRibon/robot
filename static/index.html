@@ -114,7 +114,7 @@ de 6 à 10 ans. Un enfant fête son anniversaire aujourd'hui, Benjamin, qui vien
           pushEl.querySelector('.push-front').classList.add('push-front-pushed');
           actionEl.innerText = 'Enregistrement...';
 
-          await recordAudio(recorder, async (text) => {
+          recordAudio(recorder, async (text) => {
             // Show message and register it to the chat
             textEl.innerText = text;
             chat.push(text);

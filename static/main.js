@@ -67,6 +67,5 @@ export async function textToSpeech(text) {
   const audioUrl = URL.createObjectURL(audioBlob);
 
   const sound = new Howl({ src: [audioUrl], format: ['mp3'] });
-  sound.rate(1.2);
   sound.play();
 }

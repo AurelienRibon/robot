@@ -63,9 +63,12 @@ export async function textToSpeech(text) {
     body: JSON.stringify({ text }),
   });
 
-  const audioBlob = await response.blob();
-  const audioUrl = URL.createObjectURL(audioBlob);
+  const blob = await response.blob();
+  playAudioBlob(blob);
+}
 
-  const sound = new Howl({ src: [audioUrl], format: ['mp3'] });
+export function playAudioBlob(blob, format = 'mp3') {
+  const url = URL.createObjectURL(blob);
+  const sound = new Howl({ src: [url], format: [format] });
   sound.play();
 }

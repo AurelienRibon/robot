@@ -84,7 +84,7 @@
     <div id="text"></div>
 
     <script type="module">
-      import { askGpt, disableContextMenu, recordAudio, setupRecorder, textToSpeech } from './main.js';
+      import { askGpt, disableContextMenu, setupRecorder, startRecorder, stopRecorder, textToSpeech } from './main.js';
 
       main();
 
@@ -114,7 +114,7 @@ de 6 à 10 ans. Un enfant fête son anniversaire aujourd'hui, Benjamin, qui vien
           pushEl.querySelector('.push-front').classList.add('push-front-pushed');
           actionEl.innerText = 'Enregistrement...';
 
-          recordAudio(recorder, async (text) => {
+          startRecorder(recorder, async (text) => {
             // Show message and register it to the chat
             textEl.innerText = text;
             chat.push(text);
@@ -137,7 +137,7 @@ de 6 à 10 ans. Un enfant fête son anniversaire aujourd'hui, Benjamin, qui vien
         };
 
         const touchEndListener = () => {
-          recorder.stop();
+          stopRecorder(recorder);
           pushEl.querySelector('.push-front').classList.remove('push-front-pushed');
           actionEl.innerText = 'Transcription de la voix...';
         };

@@ -13,7 +13,7 @@ export async function setupRecorder() {
   return new MediaRecorder(stream);
 }
 
-export function recordAudio(recorder, onTranscribe) {
+export function startRecorder(recorder, onTranscribe) {
   recorder.start();
 
   const chunks = [];
@@ -31,6 +31,10 @@ export function recordAudio(recorder, onTranscribe) {
 
   recorder.addEventListener('dataavailable', chunkListener);
   recorder.addEventListener('stop', stopListener);
+}
+
+export function stopRecorder(recorder) {
+  recorder.stop();
 }
 
 // -----------------------------------------------------------------------------
